@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_URL")
+}
+
+model User {
+  username       String      @id
+  email          String      @unique
+  password       String
+  role           RoleUser?
+  dosen          Dosen?
+  mahasiswa      Mahasiswa?
+  pembimbing_pkl Pembimbing?
+}
+
+enum RoleUser {
+  DOSEN
+  MAHASISWA
+  PEMBIMBING
+}
+
+model Dosen {
+  nip      String    @id @unique
+  nama     String
+  telp     String    @unique
+  gelar    String
+  status   Boolean
+  user     User      @relation(fields: [username], references: [username])
+  username String    @unique
+  Logbook  Logbook[]
+}
+
+model Mahasiswa {
+  nim      String    @id
+  nama     String
+  semester Int
+  user     User      @relation(fields: [username], references: [username])
+  username String    @unique
+  Logbook  Logbook[]
+}
+
+model Pembimbing {
+  id_user       String    @id
+  nama          String
+  telp          String
+  status        Boolean
+  nama_instansi String
+  user          User      @relation(fields: [username], references: [username])
+  username      String    @unique
+  Logbook       Logbook[]
+}
+
+model Logbook {
+  kode_logbook   String          @id
+  logbook_title  String
+  date_start     DateTime
+  date_end       DateTime
+  status         Boolean
+  dosen          Dosen           @relation(fields: [nip], references: [nip])
+  nip            String
+  mahasiswa      Mahasiswa       @relation(fields: [nim], references: [nim])
+  nim            String
+  pembimbing     Pembimbing      @relation(fields: [id_user], references: [id_user])
+  id_user        String
+  logbook_detail LogbookDetail[]
+  Monev          Monev[]
+}
+
+model LogbookDetail {
+  id           String   @id
+  date         DateTime
+  aktivitas    String   @db.LongText
+  keterangan   String   @db.LongText
+  status       Boolean
+  ttd          String
+  file_surat   String
+  logbook      Logbook  @relation(fields: [kode_logbook], references: [kode_logbook])
+  kode_logbook String
+}
+
+model Monev {
+  id                String   @id
+  date              DateTime
+  status_dosen      Boolean
+  status_pembimbing Boolean
+  logbook           Logbook  @relation(fields: [kode_logbook], references: [kode_logbook])
+  kode_logbook      String
+}
