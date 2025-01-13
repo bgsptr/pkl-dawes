@@ -26,4 +26,10 @@ export class LogbookHandler {
             logbooks: logbooks
         });
     }
+
+    fetchCurrentDayLogbook = async (req: AuthenticatedRequest, res: Response) => {
+        
+    }
+
+    
 }

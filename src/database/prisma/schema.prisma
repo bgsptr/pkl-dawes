@@ -31,6 +31,7 @@ model Dosen {
   status   Boolean
   user     User      @relation(fields: [username], references: [username])
   username String    @unique
+  Mahasiswa Mahasiswa[]
   Logbook  Logbook[]
 }
 
@@ -40,6 +41,11 @@ model Mahasiswa {
   semester Int
   user     User      @relation(fields: [username], references: [username])
   username String    @unique
+  dosen    Dosen     @relation(fields: [nip], references: [nip])
+  nip      String    @unique
+  pembimbing    Pembimbing     @relation(fields: [id_user], references: [id_user])
+  id_user String
+  nip      String    @unique
   Logbook  Logbook[]
 }
 

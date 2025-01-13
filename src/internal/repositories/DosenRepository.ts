@@ -19,4 +19,11 @@ export class DosenRepository extends BaseRepository {
         });
     }
 
+    nipDosenByUsername = async (username: string) => {
+        return await DosenRepository._prisma.dosen.findFirstOrThrow({
+            where: {
+                username: username
+            }
+        });
+    }
 }

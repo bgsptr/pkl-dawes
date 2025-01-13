@@ -27,5 +27,20 @@ export class MonevRepository extends BaseRepository {
         });
     }
 
-    
+    getMonevWithLogbook = async () => {
+        return await MonevRepository._prisma.monev.findFirst({
+
+        })
+    }
+
+    updateStatusMonev = async (idMonev: string, status: string) => {
+        await MonevRepository._prisma.monev.update({
+            where: {
+                id: idMonev
+            },
+            data: {
+                status_dosen: status
+            }
+        })
+    }
 }
