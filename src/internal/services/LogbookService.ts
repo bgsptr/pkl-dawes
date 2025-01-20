@@ -48,4 +48,8 @@ export class LogbookService {
         return true;
     }
 
+    isLogbookCodeExists = async (logbookCode: string): Promise<boolean> => {
+        const logbook = await this.logbookRepository.findByCode(logbookCode);
+        return !!logbook;
+    }
 }

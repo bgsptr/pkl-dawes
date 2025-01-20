@@ -1,4 +1,4 @@
-// import { RoleUser } from "@prisma/client";
+import { RoleUser } from "@prisma/client";
 import { BaseRepository } from "./BaseRepository";
 
 export class UserRepository extends BaseRepository {
@@ -80,4 +80,12 @@ export class UserRepository extends BaseRepository {
             }
         })
     }
+
+    findRoleOfUser = async (email: string): Promise<{ role: RoleUser | null }> => {
+        return UserRepository._prisma.user.findFirstOrThrow({
+            where: { email },
+            select: { role: true }
+        });
+    };
+    
 }

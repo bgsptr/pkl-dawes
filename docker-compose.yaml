@@ -6,7 +6,7 @@ services:
     container_name: mysql-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: docker_laravel
+      MYSQL_DATABASE: pkl_weda
       MYSQL_ROOT_PASSWORD: password
       MYSQL_USER: root
       MYSQL_PASSWORD: password
@@ -22,10 +22,16 @@ services:
       - db
     image: phpmyadmin/phpmyadmin
     environment:
-      PMA_HOST: db
+      PMA_HOST: localhost
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: password
     networks:
       - sail
     ports:
       - 8001:80
+
+volumes:
+  db-data:
+
+networks:
+  sail:

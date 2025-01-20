@@ -15,8 +15,7 @@ export class AuthService {
         }
     }
 
-    userLogin = async (loginDTO: LoginDTO): Promise<{ accessToken: string; refreshToken: string }> => {
-        const { email, password } = loginDTO;
+    login = async (email: string, password: string): Promise<{ accessToken: string; refreshToken: string }> => {
 
         const user = await this.userRepository.findUserByEmail(email);
         if (!user) throw new Error("User not found");
@@ -35,8 +34,7 @@ export class AuthService {
         return { accessToken, refreshToken };
     };
 
-    userRegister = async (registerDTO: RegisterDTO): Promise<void> => {
-        const { email, username, password, confirmPassword } = registerDTO;
+    register = async (email: string, username: string, password: string, confirmPassword: string): Promise<void> => {
 
         if (password !== confirmPassword) {
             throw new Error("Passwords do not match");

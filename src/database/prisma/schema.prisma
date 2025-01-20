@@ -45,12 +45,11 @@ model Mahasiswa {
   nip      String    @unique
   pembimbing    Pembimbing     @relation(fields: [id_user], references: [id_user])
   id_user String
-  nip      String    @unique
   Logbook  Logbook[]
 }
 
 model Pembimbing {
-  id_user       String    @id
+  id_user       String    @id @unique
   nama          String
   telp          String
   status        Boolean
@@ -58,6 +57,7 @@ model Pembimbing {
   user          User      @relation(fields: [username], references: [username])
   username      String    @unique
   Logbook       Logbook[]
+  Mahasiswa     Mahasiswa[]
 }
 
 model Logbook {

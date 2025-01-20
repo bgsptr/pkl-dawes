@@ -1,3 +1,4 @@
+import { Pembimbing } from "@prisma/client";
 import { Journal } from "../../domain/entities/Journal";
 import { JournalRepositoryInterface } from "../../domain/interfaces/JournalRepositoryInterface";
 import { BaseRepository } from "./BaseRepository";
@@ -28,7 +29,7 @@ export class PembimbingRepository
     });
   }
 
-  getPembimbingInformation = async (username: string) => {
+  getPembimbingInformation = async (username: string): Promise<Pembimbing | null> => {
     return await PembimbingRepository._prisma.pembimbing.findUnique({
       where: {
         username: username

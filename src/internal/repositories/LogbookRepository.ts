@@ -69,4 +69,12 @@ export class LogbookRepository extends BaseRepository {
             }
         });
     }
+
+    findByCode = async (logbookCode: string) => {
+        return await LogbookRepository._prisma.logbook.findFirst({
+            where: {
+                kode_logbook: logbookCode
+            }
+        })
+    }
 }

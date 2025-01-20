@@ -1,22 +1,16 @@
 import { CookieOptions, Request, Response } from "express";
 import { Prisma } from "@prisma/client";
-import { LoginService } from "../internal/services/";
-import { RegisterService } from "../internal/services/RegisterService";
 import { AuthenticatedRequest } from "../../types/interfaces/interface.common";
-import { RefreshTokenService } from "../internal/services/RefreshTokenService";
 import generateHashedPassword from "../utils/hashPassword";
 import multer from "multer";
+import { AuthService } from "../internal/services/AuthService";
 
 
 export class AuthenticationHandler {
-  private loginService: LoginService;
-  private registerService: RegisterService;
-  private refreshTokenService: RefreshTokenService;
+  private authService: AuthService;
 
-  constructor(loginService: LoginService, registerService: RegisterService, refreshTokenService: RefreshTokenService) {
-    this.loginService = loginService;
-    this.registerService = registerService;
-    this.refreshTokenService = refreshTokenService;
+  constructor(authService: AuthService) {
+    this.authService = authService;
   }
 
   loginAccount = async (req: Request, res: Response): Promise<any> => {
@@ -74,12 +68,12 @@ export class AuthenticationHandler {
   }
 
   registerAccount = async (req: Request, res: Response): Promise<any> => {
-    const { email, password, confirmPassword } = req.body;
+    const { email, username, password, confirmPassword } = req.body;
 
     try {
       if (password !== confirmPassword) return res.status(400).json({ error: true, message: "password and confirmed password not match" });
 
-      await this.registerService.execute(email, password);
+      await this.authService.register(email, username, password, confirmPassword);
 
       return res.status(201).json({
         success: true,
@@ -120,20 +114,20 @@ export class AuthenticationHandler {
     }
   
     try {
-      const tokenObject = await this.refreshTokenService.fetch(email, refresh_token, expiredDate);
-      const { newAccessToken, expiredNewAccToken, comparedToken } = tokenObject;
+      // const tokenObject = await this.refreshTokenService.fetch(email, refresh_token, expiredDate);
+      // const { newAccessToken, expiredNewAccToken, comparedToken } = tokenObject;
   
-      if (!comparedToken) {
-        return res.status(404).json({ error: true, message: 'Refresh token does not match' });
-      }
+      // if (!comparedToken) {
+      //   return res.status(404).json({ error: true, message: 'Refresh token does not match' });
+      // }
   
       // await this.refreshTokenService.updateRefreshTokenInDB(email, refresh_token);
   
       return res.status(200).json({
         error: false,
         message: 'Successfully refreshed token',
-        accessToken: newAccessToken,
-        expiredDate: expiredNewAccToken,
+        // accessToken: newAccessToken,
+        // expiredDate: expiredNewAccToken,
       });
     } catch (error: any) {
       return res.status(500).json({

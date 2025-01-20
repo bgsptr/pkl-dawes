@@ -17,4 +17,15 @@ export class ProfileService {
 
         return data
     }
+
+    getRole = async (email: string) => {
+        const { role } = await this.userRepository.findRoleOfUser(email);
+
+        if (!role) throw new Error("can't found role of user");
+        return role
+    }
+
+    getUsernameWithEmail = async (email: string) => {
+        return await this.userRepository.findUserByEmail(email);
+    }
 }
