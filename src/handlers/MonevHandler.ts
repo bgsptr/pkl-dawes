@@ -1,19 +1,23 @@
-import { Response } from "express";
+import e, { Response } from "express";
 import { AuthenticatedRequest } from "../../types/interfaces/interface.common";
 import { MonevService } from "../internal/services/MonevService";
 import { ProfileService } from "../internal/services/ProfileService";
 import { LogbookService } from "../internal/services/LogbookService";
 import { Logbook, RoleUser } from "@prisma/client";
+import { ListAllMahasiswa } from "../internal/services/ListAllMahasiswa";
 
 export class MonevHandler {
 
     private monevService;
     private profileService;
     private logbookService;
-    constructor(monevService: MonevService, profileService: ProfileService, logbookService: LogbookService) {
+    private mahasiswaService;
+
+    constructor(monevService: MonevService, profileService: ProfileService, logbookService: LogbookService, mahasiswaService: ListAllMahasiswa) {
         this.monevService = monevService;
         this.profileService = profileService;
         this.logbookService = logbookService;
+        this.mahasiswaService = mahasiswaService
     }
     
     fetchHistories = async (req: AuthenticatedRequest, res: Response) => {
@@ -70,6 +74,11 @@ export class MonevHandler {
     createMonev = async (req: AuthenticatedRequest, res: Response) => {
         const { email, role } = req;
 
+        if (!email) return res.status(401).json({
+            error: true,
+            message: "unathorized user",
+        })
+
         if (!role && role !== RoleUser.MAHASISWA) return res.status(403).json({
             error: true,
             message: "forbidden to create monev",
@@ -77,8 +86,23 @@ export class MonevHandler {
 
         // const { } = req.body
 
-        await this.monevService.submitNewMonev(req.body, nim);
+        try {
+            const { username } = await this.profileService.getUsernameWithEmail(email);
+            const nim = await this.mahasiswaService.getNimWithUsername(username);
 
+            await this.monevService.submitNewMonev(req.body, nim);
+
+            return res.status(201).json({
+                error: false,
+                message: 'success create monev'
+            })
+
+        } catch(error: any) {
+            return res.status(500).json({
+                error: true,
+                message: error?.message
+            })
+        }
 
     }
 

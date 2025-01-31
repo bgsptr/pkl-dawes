@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  datastore:
+  image: rabbitmq:4.0-management-alpine
+  container_name: rabbit-mq
+  hostname: rabbitmq
+  ports: 
+    - 15672:15672
+    - 5672:5672
+  volumes:
+    
+  networks:
+    - sail
+
+volumes:
+
+networks:

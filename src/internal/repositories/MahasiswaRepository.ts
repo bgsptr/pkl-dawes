@@ -25,4 +25,13 @@ export class MahasiswaRepository extends BaseRepository {
             }
         });
     }
+
+    getNipFromNim = async (nim: string) => {
+        return await MahasiswaRepository._prisma.mahasiswa.findFirstOrThrow({
+            where: { nim },
+            select: {
+                nip: true
+            }
+        })
+    }
 }

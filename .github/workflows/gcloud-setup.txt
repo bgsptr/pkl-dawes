@@ -1,0 +1,10 @@
+authenticate to gcloud
+
+https://github.com/google-github-actions/auth?tab=readme-ov-file#direct-wif
+
+
+
+
+
+tutorial
+https://medium.com/@shivambhadani_/getting-started-with-ci-cd-an-introductory-guide-to-github-actions-for-new-developers-f216d87f4dab

@@ -1,6 +1,6 @@
 import { BaseRepository } from "./BaseRepository";
 
-export interface Logbook {
+export interface LogbookRepoInterface {
     logbookCode: string;
     logbookName: string;
     startDate: Date;
@@ -12,16 +12,16 @@ export interface Logbook {
 }
 
 export class LogbookRepository extends BaseRepository {
-    createNewLogbook = async (logbook: Logbook, idLogbook: string) => {
-        const { logbookName, startDate, endDate, nip, nim, idPembimbing } = logbook;
+    createNewLogbook = async (logbook: LogbookRepoInterface, idLogbook: string) => {
+        const { logbookCode, logbookName, startDate, endDate, nip, nim, idPembimbing } = logbook;
         return await LogbookRepository._prisma.logbook.create({
             data: {
-                kode_logbook: idLogbook,
-                date_start: startDate,
+                kode_logbook: logbookCode,
                 logbook_title: logbookName,
+                date_start: startDate,
                 date_end: endDate,
-                nip: nip,
-                nim: nim,
+                nip,
+                nim,
                 id_user: idPembimbing,
                 status: false
             }
@@ -52,7 +52,7 @@ export class LogbookRepository extends BaseRepository {
         });
     }
 
-    updateLogbookById = async (id: string, logbook: Logbook) => {
+    updateLogbookById = async (id: string, logbook: LogbookRepoInterface) => {
         const { logbookName, startDate, endDate, nip, nim, idPembimbing } = logbook;
 
         return await LogbookRepository._prisma.logbook.update({

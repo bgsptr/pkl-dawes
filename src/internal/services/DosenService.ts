@@ -14,6 +14,6 @@ export class DosenService {
     }
 
     updateStatusMonev = async (nip: string, idMonev: string) => {
-
+        
     }
 }

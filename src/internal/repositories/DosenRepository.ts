@@ -1,3 +1,4 @@
+import { Dosen, Mahasiswa } from "@prisma/client";
 import { BaseRepository } from "./BaseRepository";
 
 export class DosenRepository extends BaseRepository {
@@ -6,7 +7,10 @@ export class DosenRepository extends BaseRepository {
             data: {
                 nip: nip,
                 status: true,
-                username: username
+                username: username,
+                nama: "",
+                gelar: "",
+                telp: ""
             }
         })
     };

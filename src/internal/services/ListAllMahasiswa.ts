@@ -39,4 +39,11 @@ export class ListAllMahasiswa {
         return nim;
 
     }
+
+    
+    getNipDosenBySupervisedNIM = async (nim: string) => {
+        const { nip } = await this.mahasiswaRepository.getNipFromNim(nim);
+
+        return nip;
+    }
 }

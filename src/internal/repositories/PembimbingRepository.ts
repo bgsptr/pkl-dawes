@@ -1,6 +1,5 @@
 import { Pembimbing } from "@prisma/client";
-import { Journal } from "../../domain/entities/Journal";
-import { JournalRepositoryInterface } from "../../domain/interfaces/JournalRepositoryInterface";
+// import { JournalRepositoryInterface } from "../../domain/interfaces/JournalRepositoryInterface";
 import { BaseRepository } from "./BaseRepository";
 
 export class PembimbingRepository

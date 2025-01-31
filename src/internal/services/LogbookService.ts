@@ -1,5 +1,5 @@
 import { Logbook } from "@prisma/client";
-import { LogbookRepository } from "../repositories/LogbookRepository";
+import { LogbookRepoInterface, LogbookRepository } from "../repositories/LogbookRepository";
 import { MahasiswaRepository } from "../repositories/MahasiswaRepository";
 import { UserRepository } from "../repositories/UserRepository";
 
@@ -14,11 +14,40 @@ export class LogbookService {
         this.mahasiswaRepository = mahasiswaRepository;
     }
 
-    newLogbook = async (role: string, logbook: Logbook, idLogbook: string) => {
+    newLogbook = async (role: string, logbook: any, nip: string, nim: string) => {
+        const { logbook_title, date_start, date_end, id_user } = logbook;
         const regexRole = role.match(/A-Za-z0-9/);
         if (!role.includes("MAHASISWA")) throw new Error('forbidden');
 
-        return await this.logbookRepository.createNewLogbook(logbook, idLogbook);
+        // create idLogbook
+        const idLogbook = "";
+
+        // export interface Logbook {
+        //     logbookCode: string;
+        //     logbookName: string;
+        //     startDate: Date;
+        //     endDate: Date;
+        //     status?: boolean;
+        //     nip: string;
+        //     nim: string;
+        //     idPembimbing: string;
+        // }
+
+        const strToDateStart = new Date(date_start);
+        const strToDateEnd = new Date(date_end);
+
+        const logbookData: LogbookRepoInterface = {
+            logbookCode: idLogbook,
+            logbookName: logbook_title,
+            startDate: strToDateStart,
+            endDate: strToDateEnd,
+            status: true,
+            nip,
+            nim,
+            idPembimbing: id_user ?? ""
+        }
+
+        return await this.logbookRepository.createNewLogbook(logbookData, idLogbook);
     }
 
     findLogbookByNIM = async (email: string): Promise<Logbook[] | null> => {
@@ -40,7 +69,7 @@ export class LogbookService {
 
     }
 
-    updateExistingLogbook = async (logbookCode: string, logbook: Logbook): Promise<boolean> => {
+    updateExistingLogbook = async (logbookCode: string, logbook: any): Promise<boolean> => {
         const updatedLogbook = await this.logbookRepository.updateLogbookById(logbookCode, logbook);
 
         if (!updatedLogbook) return false;
